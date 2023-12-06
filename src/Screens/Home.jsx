@@ -3,6 +3,7 @@ import video from './h2.mp4'
 import '../stylesheets/home.css'
 import HomeRightDesign from '../Components/HomeRightDesign'
 import HomeLeftDesign from '../Components/HomeLeftDesign'
+import CustomerNavBar from '../Components/CustomerNavBar'
 
 export default function Home() {
   const [prods,setProds] = useState([]);
@@ -29,13 +30,13 @@ export default function Home() {
   },[])
   return (
     <>
+        <CustomerNavBar />
         <div className='vidcon'>
             <video autoPlay muted loop playsInline id='homevideo'>
                 <source src={video}/>
             </video>
         </div>
         <h1><div className="quotes">Experience the power of exceptional design.</div></h1>
-        {/* <HomeRightDesign title={"tiles"} dimg={tilepic} /> */}
         {showLoader ? <div className="AdminLoadercon">
                 <img src='https://i.gifer.com/70bm.gif' alt='' className='AdminLoader' />
                 <span className='AdminLoaderText'>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom";
 import "../stylesheets/ShowProdSubCat.css"
 import SAECard from '../Components/SAECard';
+import CustomerNavBar from '../Components/CustomerNavBar'
 
 export default function ShowProdSubCat() {
     const { id } = useParams();
@@ -119,6 +120,7 @@ const handleFilter = (e,val)=>{
 }
 return (
     <div className='sap-big-con'>
+        <CustomerNavBar/>
       <img src={subcat.dispimg} className='sap-dispimg' alt="" />
       <div className="sap-title"><span>{subcat.title}</span></div>
       

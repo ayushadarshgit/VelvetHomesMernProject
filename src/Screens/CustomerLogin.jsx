@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../stylesheets/companyLogin.css";
 import { useDispatch } from "react-redux";
-import { loginSeller } from "../features/login/loginSlice";
-
-export default function Company_Login({ show }) {
+import { loginCustomer } from "../features/login/loginSlice";
+const CustomerLogin = ({show}) => {
   // Variable To Redirect To any Page
   let navigate = useNavigate();
 
@@ -63,6 +62,8 @@ export default function Company_Login({ show }) {
   // signupButton state is Used to Show the user to fill all boxes with correct values when signUp button is clicked
   const [signupButton, setSignupButton] = useState(false);
 
+  const [showRedirectedMessage, setShowRedirectedMessage] = useState(show ? true : false);
+
   // Css Properties Which differ the buttons In Order To Show Which Form is Selected Login or SignUp
   const selectedStyle = {
     height: "60px",
@@ -70,11 +71,6 @@ export default function Company_Login({ show }) {
     borderBottomLeftRadius: "0",
     borderBottomRightRadius: "0",
   };
-
-  // State to show and hide redirectedMessage
-  const [showRedirectedMessage, setShowRedirectedMessage] = useState(
-    show ? true : false
-  );
 
   // handleLoginChange is the function used mainly for handling the changes done in the Input Form
   const handleLoginChange = (evt) => {
@@ -99,21 +95,20 @@ export default function Company_Login({ show }) {
   };
 
   const dispatch = useDispatch();
-
   // Function To handle OnSubmit event of login form
   async function handleLoginSubmit(evt) {
     evt.preventDefault();
     const val = Object.values(isValidInput).every((value) => value === true);
     if (val) {
       const response = await fetch(
-        "http://localhost:5000/velvethomes/seller/login",
+        "http://localhost:5000/velvethomes/customer/login",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: compStateLogin.username,
+            username: compStateLogin.username,
             password: compStateLogin.password,
           }),
         }
@@ -124,17 +119,14 @@ export default function Company_Login({ show }) {
         setIsValidInput({ ...isValidInput, username: false, password: false });
       }
       if (json.success) {
-        localStorage.setItem("userEmail", compStateLogin.username);
-        localStorage.setItem("authToken", json.authToken);
-        localStorage.setItem("companyLogin", true);
-        dispatch(loginSeller());
-        navigate("/velvethomes/seller/home");
+        localStorage.setItem("customerUsername", compStateLogin.username);
+        dispatch(loginCustomer());
+        navigate("/");
       }
     } else {
       alert("Enter All Valid Enteries");
     }
   }
-
   // Function to handle the changes done in the SignUp Form
   const handleSignUpChange = (evt) => {
     setEmailUsed(false);
@@ -178,21 +170,20 @@ export default function Company_Login({ show }) {
     if (val) {
       setSignupButton(false);
       const response = await fetch(
-        "http://localhost:5000/velvethomes/seller/createcomp",
+        "http://localhost:5000/velvethomes/customer/signup",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: compStateSignup.email,
+            username: compStateSignup.email,
             password: compStateSignup.password,
-            companyname: compStateSignup.companyname,
+            fullname: compStateSignup.companyname,
           }),
         }
       );
       const json = await response.json();
-      console.log(json);
       if (json.errors === "Email already used") {
         setEmailUsed(true);
         setIsValidSignupInput({ ...isValidSignupInput, email: false });
@@ -200,10 +191,9 @@ export default function Company_Login({ show }) {
         setEmailUsed(false);
       }
       if (json.success) {
-        localStorage.setItem("userEmail", compStateSignup.email);
-        localStorage.setItem("authToken", json.authToken);
-        localStorage.setItem("companyLogin", true);
-        navigate("/velvethomes/seller/home");
+        localStorage.setItem("customerUsername", compStateSignup.email);
+        localStorage.setItem("customerLogin", true);
+        navigate("/");
       }
     } else {
       setSignupButton(true);
@@ -217,7 +207,7 @@ export default function Company_Login({ show }) {
           <div className="img-back"></div>
           <div className="overlay-company">
             <div className="text-company">
-              Welcome To <br /> VelvetHome's Seller <br /> {val} Page
+              Welcome To <br /> VelvetHome's Customer <br /> {val} Page
             </div>
           </div>
         </div>
@@ -240,16 +230,14 @@ export default function Company_Login({ show }) {
           </div>
           {val === "Login" && (
             <form action="" onSubmit={handleLoginSubmit} className="clf">
-              {showRedirectedMessage && (
-                <div
-                  className="input-company-wrapper"
-                  style={{ marginTop: "25px" }}
-                >
-                  <label className="input-clf-label" style={{ color: "red" }}>
-                    **Please Login To Continue Your Shopping
-                  </label>
-                </div>
-              )}
+              { showRedirectedMessage && <div
+                className="input-company-wrapper"
+                style={{ marginTop: "25px" }}
+              >
+                <label className="input-clf-label" style={{color: "red"}}>
+                  **Please Login To Continue Your Shopping
+                </label>
+              </div>}
               <div
                 className="input-company-wrapper"
                 style={{ marginTop: "25px" }}
@@ -396,7 +384,7 @@ export default function Company_Login({ show }) {
                 style={{ marginTop: "25px" }}
               >
                 <label className="input-clf-label" style={{color: "red"}}>
-                  **Please SignUp To Continue Your Shopping
+                  **Please Sign Up To Continue Your Shopping
                 </label>
               </div>}
               <div
@@ -404,7 +392,7 @@ export default function Company_Login({ show }) {
                 style={{ marginTop: "25px" }}
               >
                 <label htmlFor="companyname" className="input-clf-label">
-                  Enter CompanyName : <span className="required-span">*</span>
+                  Enter Your Full Name : <span className="required-span">*</span>
                 </label>
                 <input
                   type="text"
@@ -683,4 +671,6 @@ export default function Company_Login({ show }) {
       </div>
     </div>
   );
-}
+};
+
+export default CustomerLogin;

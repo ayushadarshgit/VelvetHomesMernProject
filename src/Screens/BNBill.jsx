@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import "../stylesheets/BNBill.css"
+import CustomerNavBar from '../Components/CustomerNavBar'
 
 export default function BNBill() {
     const navigate = useNavigate();
@@ -108,6 +109,7 @@ export default function BNBill() {
     }
   return (
     <div className='BNB-main'>
+      <CustomerNavBar />
       <div className="BNB-head">
         <div className="BNB-head-s">Sr. No.</div>
         <div className="BNB-head-p">Product</div>

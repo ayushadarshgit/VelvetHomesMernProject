@@ -12,15 +12,22 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { useDispatch, useSelector } from 'react-redux';
 
 import logo from './logo.jpeg'
 
 import { useNavigate } from "react-router-dom";
+import { logout } from '../features/login/loginSlice';
 
-const pages = ['Tiles', 'Furniture', 'Sanitary', 'Artifacts', 'Paints'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
+    
+    const isCustomerLoggedIn = useSelector(state => state.isCustomerLoggedIn);
+    const dispatch = useDispatch();
+
+    const pages = ['Tiles', 'Furniture', 'Sanitary', 'Artifacts', 'Paints'];
+    const settings = ['Profile', 'Cart', 'Login As Seller', 'Login As Admin', isCustomerLoggedIn ? 'Logout': 'Login'];
+
     const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -39,6 +46,33 @@ function ResponsiveAppBar() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const handleRedirect = (page) => {
+        if(page==='Tiles'){
+            navigate('/velvethomes/showprodcat/64a594174f6b05e6fe5a5545');
+        }
+        else if(page==='Furniture'){
+            navigate('/velvethomes/showprodcat/64a5955d9b3dc77cbe74db29');
+        }else if(page==='Sanitary'){
+            navigate('/velvethomes/showprodcat/64a5960c7b9dea400786c055')
+        }else if(page==='Artifacts'){
+            navigate('/velvethomes/showallprodsubcat/64aa7d3f3f89f953e9b1e8a8')
+        }else if(page==='Paints'){
+            navigate('/velvethomes/showallprodsubcat/64aa7d3f3f89f953e9b1e8aa')
+        }else if(page==='Cart'){
+            navigate('/velvethomes/cart')
+        }else if(page==='Profile'){
+            navigate('/velvethomes/pinfo')
+        }else if(page==='Login As Seller'){
+            navigate('/velvethomes/seller/login')
+        }else if(page==='Login As Admin'){
+            navigate('/velvethomes/admin/login')
+        }else if(page==='Login'){
+            navigate('/login')
+        }else{
+            dispatch(logout());
+        }
+    }
 
     return (
         <AppBar position="static" sx={{ backgroundColor: '#442727' }}>
@@ -118,7 +152,7 @@ function ResponsiveAppBar() {
                         {pages.map((page) => (
                             <Button
                                 key={page}
-                                onClick={handleCloseNavMenu}
+                                onClick={()=>handleRedirect(page)}
                                 sx={{ my: 2, color: 'white', display: 'block' }}
                             >
                                 {page}
@@ -149,7 +183,7 @@ function ResponsiveAppBar() {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                <MenuItem key={setting} onClick={()=>handleRedirect(setting)}>
                                     <Typography textAlign="center">{setting}</Typography>
                                 </MenuItem>
                             ))}

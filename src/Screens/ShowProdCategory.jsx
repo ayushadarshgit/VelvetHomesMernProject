@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react'
 import { useParams } from "react-router-dom";
 import ImageSlider from '../Components/ImageSlider';
 import SPCcard from '../Components/SPCcard';
+import CustomerNavBar from '../Components/CustomerNavBar'
 
 export default function ShowProdCategory() {
   const { id } = useParams();
@@ -34,6 +35,7 @@ useEffect(() => {
 }, []);
   return (
     <div style={{width: '100%'}}>
+      <CustomerNavBar />
       {cat.designImgs.length>0 && <ImageSlider images={cat.designImgs} title={cat.title}/>}
       
       <div style={{

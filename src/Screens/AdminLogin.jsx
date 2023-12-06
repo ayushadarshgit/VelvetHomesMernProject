@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import "../stylesheets/AdminLogin.css";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginAdmin } from "../features/login/loginSlice";
 
 export default function AdminLogin() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [isValidInput, setIsValidInput] = useState({
     username: false,
@@ -64,8 +69,9 @@ export default function AdminLogin() {
         localStorage.setItem('adminEmail',compStateLogin.username);
         localStorage.setItem("authTokenAdmin",json.authToken);
         localStorage.setItem('adminLogin',true);
+        dispatch(loginAdmin());
         setShowGif(false);
-        alert("Logged In")
+        navigate('/velvethomes/admin/home');
       }
     }else{
       setShowGif(false);
